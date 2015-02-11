@@ -26,10 +26,47 @@ NULL
 ```
 
 # Transaction Support
+A transaction is a series of revertable commands. It can be committed or rollbacked after it begins.
+
 ## Basic Transaction
-- BEGIN:
-- COMMIT:
-- ROLLBACK:
+- BEGIN: set the begin point of a new transaction
+- COMMIT: commit all the changes of all the outstanding transactions
+- ROLLBACK: rollback the changes of the current transaction
+
+Example:
+```
+>>> SET A 5
+>>> BEGIN
+>>> SET A 10
+>>> SET A 20
+>>> GET A
+20
+>>> COUNT 5
+0
+>>> DELETE A
+>>> ROLLBACK
+>>> GET A
+5
+```
 
 ## Nested Transaction
+Nested transactions a useful when only the most recent transaction is required to be rollbacked.
+
+Example:
+```
+>>> SET A 5
+>>> BEGIN
+>>> SET A 10
+>>> BEGIN
+>>> SET A 20
+>>> GET A
+20
+>>> COUNT 5
+0
+>>> DELETE A
+>>> ROLLBACK
+>>> GET A
+10
+```
+
 
